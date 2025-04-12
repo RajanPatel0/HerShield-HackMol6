@@ -31,8 +31,10 @@ app.use((req, res, next) => {
 });
 // API routes
 app.use("/api/auth", authRoutes);
-app.use("/api/gemini", geminiRoutes.router || geminiRoutes); // Add geminiRoutes middleware
-
+app.use("/api/gemini", (req, res, next) => {
+  console.log('Gemini route hit:', req.path);
+  next();
+}, geminiRoutes);
 // HTTP + Socket setup
 const server = http.createServer(app);
 const io = new Server(server, {
