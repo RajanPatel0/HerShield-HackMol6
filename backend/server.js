@@ -23,7 +23,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || "*", // Allow Render frontend
+  origin: process.env.CLIENT_URL || true, // Allow Render frontend
   credentials: true
 }));
 app.use(express.json({ limit: "10mb" }));
