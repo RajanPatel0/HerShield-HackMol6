@@ -22,10 +22,15 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+const allowedOrigins = process.env.NODE_ENV === "production"
+  ? true // reflect the request origin
+  : process.env.CLIENT_URL || true;
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || true, // Allow Render frontend
+  origin: allowedOrigins,
   credentials: true
 }));
+
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
