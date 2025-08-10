@@ -32,6 +32,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "vite": "^6.x.x"
   }
 }
