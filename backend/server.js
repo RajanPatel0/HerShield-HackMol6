@@ -27,9 +27,20 @@ const allowedOrigins = process.env.NODE_ENV === "production"
   : process.env.CLIENT_URL || true;
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    // Allow all in production
+    if (process.env.NODE_ENV === "production") {
+      return callback(null, true);
+    }
+    // Allow dev client URL or no origin (like Postman)
+    if (!origin || origin === process.env.CLIENT_URL) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
   credentials: true
 }));
+
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
@@ -40,12 +51,14 @@ app.use("/api/gemini", geminiRoutes);
 
 // HTTP + Socket setup
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "*",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
+
 
 const connectedUsers = new Map();
 
